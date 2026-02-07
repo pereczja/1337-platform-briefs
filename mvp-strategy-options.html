@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1337 Platform — MVP Stratégiai Opciók</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FBFAF4;
+            --bg-warm: #EAEBE4;
+            --text: #111111;
+            --text-secondary: #78716c;
+            --accent: #783FF3;
+            --accent-light: rgba(120,63,243,0.1);
+            --orange: #FA7E00;
+            --orange-light: rgba(250,126,0,0.1);
+            --success: #16a34a;
+            --success-light: rgba(22,163,74,0.1);
+            --warning: #dc2626;
+            --warning-light: rgba(220,38,38,0.1);
+            --stone-dark: #1c1917;
+            --stone: #44403c;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--bg-warm);
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .doc-title {
+            font-size: 42px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .doc-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        /* Context Box */
+        .context-box {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 40px -40px;
+        }
+
+        .context-box h2 {
+            font-size: 24px;
+            color: var(--bg);
+            margin-bottom: 20px;
+        }
+
+        .context-box p {
+            color: #a8a29e;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .context-box strong {
+            color: var(--bg);
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .insight {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .insight .source {
+            font-size: 9px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .insight .stat {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            color: var(--bg);
+            margin-bottom: 8px;
+        }
+
+        .insight .desc {
+            font-size: 11px;
+            color: #a8a29e;
+        }
+
+        /* Strategic Question */
+        .strategic-question {
+            background: linear-gradient(135deg, var(--accent) 0%, #5a2eb8 100%);
+            color: white;
+            padding: 40px;
+            margin: 40px -40px;
+            text-align: center;
+        }
+
+        .strategic-question h2 {
+            font-size: 32px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .strategic-question p {
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Sections */
+        section {
+            margin: 50px 0;
+        }
+
+        section h2 {
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        section h3 {
+            font-size: 20px;
+            margin: 24px 0 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--bg-warm);
+        }
+
+        /* Option Cards */
+        .option-card {
+            background: white;
+            border: 2px solid var(--bg-warm);
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .option-card.recommended {
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px rgba(120,63,243,0.1);
+        }
+
+        .option-header {
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-warm);
+        }
+
+        .option-card.recommended .option-header {
+            background: var(--accent);
+            color: white;
+        }
+
+        .option-letter {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 600;
+            opacity: 0.3;
+        }
+
+        .option-card.recommended .option-letter {
+            opacity: 0.5;
+            color: white;
+        }
+
+        .option-title-group {
+            flex: 1;
+            padding: 0 24px;
+        }
+
+        .option-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .option-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .option-card.recommended .option-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .option-badge {
+            font-size: 10px;
+            padding: 6px 12px;
+            background: var(--stone-dark);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .option-card.recommended .option-badge {
+            background: white;
+            color: var(--accent);
+        }
+
+        .option-body {
+            padding: 30px;
+        }
+
+        .option-philosophy {
+            background: var(--bg-warm);
+            padding: 20px;
+            margin-bottom: 24px;
+            font-style: italic;
+            font-size: 13px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .option-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .detail-section h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .detail-section ul {
+            list-style: none;
+            font-size: 12px;
+        }
+
+        .detail-section li {
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .detail-section li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .detail-section.cons li::before {
+            content: "!";
+            color: var(--warning);
+        }
+
+        .detail-section.pros li::before {
+            content: "✓";
+            color: var(--success);
+        }
+
+        /* Metrics */
+        .option-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--bg-warm);
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric .label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .metric .value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+        }
+
+        .metric .value.low { color: var(--success); }
+        .metric .value.medium { color: var(--orange); }
+        .metric .value.high { color: var(--warning); }
+
+        /* Reference Examples */
+        .reference {
+            background: var(--bg-warm);
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 11px;
+        }
+
+        .reference .title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .reference a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 12px;
+        }
+
+        .comparison-table th {
+            background: var(--stone-dark);
+            color: var(--bg);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-warm);
+            vertical-align: top;
+        }
+
+        .comparison-table .highlight {
+            background: var(--accent-light);
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            margin: 30px 0;
+            border: 1px solid var(--bg-warm);
+        }
+
+        .timeline-phase {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid var(--bg-warm);
+        }
+
+        .timeline-phase:last-child {
+            border-right: none;
+        }
+
+        .timeline-phase .phase-name {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .timeline-phase .phase-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-phase .phase-items {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Best Practices */
+        .best-practices {
+            background: var(--success-light);
+            border-left: 4px solid var(--success);
+            padding: 24px;
+            margin: 30px 0;
+        }
+
+        .best-practices h4 {
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: var(--success);
+        }
+
+        .best-practices ul {
+            list-style: none;
+            font-size: 12px;
+        }
+
+        .best-practices li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .best-practices li::before {
+            content: "★";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        /* Recommendation */
+        .recommendation {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 40px -40px;
+        }
+
+        .recommendation h2 {
+            font-size: 28px;
+            color: var(--bg);
+            margin-bottom: 20px;
+        }
+
+        .recommendation p {
+            color: #a8a29e;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation strong {
+            color: var(--bg);
+        }
+
+        .recommendation .highlight-text {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--bg-warm);
+            margin-top: 60px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .sources {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg-warm);
+            font-size: 10px;
+            text-align: left;
+        }
+
+        .sources h4 {
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .sources a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .doc-title {
+                font-size: 28px;
+            }
+
+            .context-box, .strategic-question, .recommendation {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .option-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .option-details {
+                grid-template-columns: 1fr;
+            }
+
+            .option-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timeline {
+                flex-direction: column;
+            }
+
+            .timeline-phase {
+                border-right: none;
+                border-bottom: 1px solid var(--bg-warm);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">1337</div>
+        <div class="tagline">The Intelligence Company</div>
+    </header>
+
+    <h1 class="doc-title">MVP Stratégiai Opciók</h1>
+    <p class="doc-subtitle">Három út a piacra — melyik illik a 1337 DNS-éhez?</p>
+
+    <!-- Context -->
+    <div class="context-box">
+        <h2>Piaci Kontextus</h2>
+        <p>
+            A kutatás egyértelművé tette: <strong>az UI háborút elvesztettük, mielőtt elkezdődött volna.</strong>
+            OpenAI, Anthropic, Microsoft és Google milliárdokat költenek a horizontális AI interfészre.
+            A skills-alapú megközelítés és az FDE modell viszont <strong>olyan területek, ahol még nincs egyértelmű győztes.</strong>
+        </p>
+
+        <div class="insight-grid">
+            <div class="insight">
+                <div class="source">Gartner 2026</div>
+                <div class="stat">30%</div>
+                <div class="desc">A GenAI projektek PoC után megbuknak — adoption failure, nem tech failure</div>
+            </div>
+            <div class="insight">
+                <div class="source">Gartner 2026</div>
+                <div class="stat">60%</div>
+                <div class="desc">Az agentic AI projektek 2026-ban megbuknak — "lack of AI-ready data"</div>
+            </div>
+            <div class="insight">
+                <div class="source">Credal.ai Pivot</div>
+                <div class="stat">$10 → $2000</div>
+                <div class="desc">"AI Chief of Staff" termékért $10-20-at fizettek volna — security layer-ért $2000+</div>
+            </div>
+            <div class="insight">
+                <div class="source">Dust.tt</div>
+                <div class="stat">Multi-agent</div>
+                <div class="desc">"Multiple specialized agents outperform a single general-purpose one"</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategic Question -->
+    <div class="strategic-question">
+        <h2>Mi legyen a 1337 moat-ja?</h2>
+        <p>
+            A platform? A skills ökoszisztéma? Az FDE delivery modell?
+            Vagy a vertikális iparági tudás? — A válasz meghatározza az MVP-t.
+        </p>
+    </div>
+
+    <!-- Option A -->
+    <div class="option-card">
+        <div class="option-header">
+            <div class="option-letter">A</div>
+            <div class="option-title-group">
+                <div class="option-title">"FDE-First"</div>
+                <div class="option-subtitle">Services + Platform Tooling</div>
+            </div>
+            <div class="option-badge">Palantir Playbook</div>
+        </div>
+        <div class="option-body">
+            <div class="option-philosophy">
+                "A platform az FDE munkájának a mellékterméke. Előbb oldjuk meg az ügyfél problémáját,
+                aztán productizáljuk a megoldást. Nem platform-ot adunk el, hanem eredményt."
+            </div>
+
+            <div class="option-details">
+                <div class="detail-section">
+                    <h4>Miben áll az MVP</h4>
+                    <ul>
+                        <li>FDE service: 2-4 hetes engagement-ek</li>
+                        <li>Skill-ek: amit az FDE épít az ügyfélnek</li>
+                        <li>Platform: belső tooling, nem termék</li>
+                        <li>Minden engagement → új skill, új MCP server</li>
+                    </ul>
+                </div>
+                <div class="detail-section pros">
+                    <h4>Erősségek</h4>
+                    <ul>
+                        <li>Cash-pozitív az 1. naptól</li>
+                        <li>Valódi problémákból épül a platform</li>
+                        <li>Mély ügyfélkapcsolatok</li>
+                        <li>1337 consulting DNS-éhez illik</li>
+                    </ul>
+                </div>
+                <div class="detail-section cons">
+                    <h4>Gyengeségek</h4>
+                    <ul>
+                        <li>Nehéz skálázni (FDE bottleneck)</li>
+                        <li>Consulting-nak tűnik, nem SaaS-nak</li>
+                        <li>Valuation alacsonyabb lesz</li>
+                        <li>Függőség a csapat méretétől</li>
+                    </ul>
+                </div>
+                <div class="detail-section">
+                    <h4>Best For</h4>
+                    <ul>
+                        <li>Ha a delivery modell a moat</li>
+                        <li>Ha cash-flow fontosabb mint growth</li>
+                        <li>Ha 2-3 anchor client elég a starthoz</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-metrics">
+                <div class="metric">
+                    <div class="label">Time to Revenue</div>
+                    <div class="value low">1-2 hét</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Upfront Investment</div>
+                    <div class="value low">Alacsony</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Scalability</div>
+                    <div class="value high">Korlátozott</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Defensibility</div>
+                    <div class="value medium">Közepes</div>
+                </div>
+            </div>
+
+            <div class="reference">
+                <div class="title">Reference: Palantir korai évei</div>
+                "Up until circa 2016, Palantir had more FDEs than normal software engineers. Each FDE builds prototypes
+                using platform services, and the platform org continuously generalizes and incorporates new capabilities."
+                — <a href="https://www.svpg.com/forward-deployed-engineers/" target="_blank">SVPG</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option B -->
+    <div class="option-card">
+        <div class="option-header">
+            <div class="option-letter">B</div>
+            <div class="option-title-group">
+                <div class="option-title">"Skills Platform"</div>
+                <div class="option-subtitle">Platform + Marketplace</div>
+            </div>
+            <div class="option-badge">Product-Led</div>
+        </div>
+        <div class="option-body">
+            <div class="option-philosophy">
+                "A platform maga a termék. Pre-built skill-ekkel indulunk, az ügyfelek saját skill-eket is építhetnek.
+                A Marketplace network effectje lesz a moat — minél több skill, annál értékesebb a platform."
+            </div>
+
+            <div class="option-details">
+                <div class="detail-section">
+                    <h4>Miben áll az MVP</h4>
+                    <ul>
+                        <li>Platform: self-service onboarding</li>
+                        <li>5-10 pre-built skill (Code Review, Doc, stb.)</li>
+                        <li>Skill authoring UI</li>
+                        <li>MCP integration framework</li>
+                        <li>Usage-based pricing</li>
+                    </ul>
+                </div>
+                <div class="detail-section pros">
+                    <h4>Erősségek</h4>
+                    <ul>
+                        <li>Skálázható SaaS modell</li>
+                        <li>Network effects lehetőség</li>
+                        <li>Tiszta product narrative</li>
+                        <li>Magasabb valuation</li>
+                    </ul>
+                </div>
+                <div class="detail-section cons">
+                    <h4>Gyengeségek</h4>
+                    <ul>
+                        <li>Hosszabb time-to-market (3-6 hónap)</li>
+                        <li>Frontális verseny Dust/Credal-lal</li>
+                        <li>Chicken-egg: skill-ek ↔ users</li>
+                        <li>Enterprise adoption lassú PLG-vel</li>
+                    </ul>
+                </div>
+                <div class="detail-section">
+                    <h4>Best For</h4>
+                    <ul>
+                        <li>Ha a platform maga a moat</li>
+                        <li>Ha VC funding a cél</li>
+                        <li>Ha horizontális piacra lősz</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-metrics">
+                <div class="metric">
+                    <div class="label">Time to Revenue</div>
+                    <div class="value medium">3-6 hónap</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Upfront Investment</div>
+                    <div class="value medium">Közepes</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Scalability</div>
+                    <div class="value low">Magas</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Defensibility</div>
+                    <div class="value medium">Közepes</div>
+                </div>
+            </div>
+
+            <div class="reference">
+                <div class="title">Reference: Dust.tt megközelítés</div>
+                "Focusing on product is the most direct way to shift behaviors and create early value.
+                Only after scale is achieved, should a startup integrate vertically."
+                — <a href="https://sequoiacap.com/podcast/training-data-dust/" target="_blank">Dust Cofounders, Sequoia Podcast</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option C - Recommended -->
+    <div class="option-card recommended">
+        <div class="option-header">
+            <div class="option-letter">C</div>
+            <div class="option-title-group">
+                <div class="option-title">"Vertical Deep"</div>
+                <div class="option-subtitle">Industry-Specific AI Operations</div>
+            </div>
+            <div class="option-badge">★ Javasolt</div>
+        </div>
+        <div class="option-body">
+            <div class="option-philosophy">
+                "Egy iparágban a világ legjobb megoldása leszünk, aztán onnan terjeszkedünk.
+                A KAVOSZ és a magyar pénzügyi szektor lesz a reference — ahol a reguláció, a nyelv és a
+                helyi kontextus versenyelőny, nem hátrány."
+            </div>
+
+            <div class="option-details">
+                <div class="detail-section">
+                    <h4>Miben áll az MVP</h4>
+                    <ul>
+                        <li>1 vertikál: Hungarian FSI / Lending</li>
+                        <li>End-to-end KAVOSZ-típusú megoldás</li>
+                        <li>Deep integration: LIZI, SZKP, CRM</li>
+                        <li>Compliance-ready (MNB, AI Act)</li>
+                        <li>FDE + Platform hybrid</li>
+                    </ul>
+                </div>
+                <div class="detail-section pros">
+                    <h4>Erősségek</h4>
+                    <ul>
+                        <li>Kevesebb direkt verseny</li>
+                        <li>Word-of-mouth az iparágban</li>
+                        <li>Reguláció mint moat</li>
+                        <li>Reference case = sales tool</li>
+                        <li>FDE + Product hybrid</li>
+                    </ul>
+                </div>
+                <div class="detail-section cons">
+                    <h4>Gyengeségek</h4>
+                    <ul>
+                        <li>Kisebb TAM kezdetben</li>
+                        <li>Iparág-specifikus tudás kell</li>
+                        <li>"Csak magyar pénzügy" perception</li>
+                        <li>Terjeszkedés más vertikálba nehezebb</li>
+                    </ul>
+                </div>
+                <div class="detail-section">
+                    <h4>Best For</h4>
+                    <ul>
+                        <li>Ha az iparági tudás a moat</li>
+                        <li>Ha van anchor client (KAVOSZ)</li>
+                        <li>Ha a lokális piac az első célpont</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="option-metrics">
+                <div class="metric">
+                    <div class="label">Time to Revenue</div>
+                    <div class="value low">2-4 hét</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Upfront Investment</div>
+                    <div class="value low">Alacsony</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Scalability</div>
+                    <div class="value medium">Közepes</div>
+                </div>
+                <div class="metric">
+                    <div class="label">Defensibility</div>
+                    <div class="value low">Magas</div>
+                </div>
+            </div>
+
+            <div class="reference">
+                <div class="title">Reference: Credal.ai Pivot Story</div>
+                "Their initial AI chief of staff product failed quickly. When pilot customers said they'd only pay
+                $10-20 monthly instead of their target $2,000, they pivoted to what customers actually valued:
+                security features for their specific domain."
+                — <a href="https://www.frontlines.io/from-product-failure-to-30-monthly-growth-the-credal-pivot-story/" target="_blank">Frontlines.io</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <section>
+        <h2>Összehasonlítás</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Dimenzió</th>
+                    <th>A: FDE-First</th>
+                    <th>B: Skills Platform</th>
+                    <th class="highlight">C: Vertical Deep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Fő termék</strong></td>
+                    <td>FDE service + tooling</td>
+                    <td>Self-service platform</td>
+                    <td class="highlight">Iparági megoldás</td>
+                </tr>
+                <tr>
+                    <td><strong>Pricing</strong></td>
+                    <td>Project-based (€30-100k)</td>
+                    <td>Usage-based (€5-50k/év)</td>
+                    <td class="highlight">Hybrid (€20-80k/év)</td>
+                </tr>
+                <tr>
+                    <td><strong>GTM Motion</strong></td>
+                    <td>Pure sales-led</td>
+                    <td>Product-led + sales-assist</td>
+                    <td class="highlight">Reference-led + FDE</td>
+                </tr>
+                <tr>
+                    <td><strong>Első 3 ügyfél</strong></td>
+                    <td>Bárki aki fizet</td>
+                    <td>Early adopters, SMB</td>
+                    <td class="highlight">KAVOSZ + 2 másik FSI</td>
+                </tr>
+                <tr>
+                    <td><strong>1337 DNS fit</strong></td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>⭐⭐</td>
+                    <td class="highlight">⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td><strong>Versenyhelyzet</strong></td>
+                    <td>Palantir klónok</td>
+                    <td>Dust, Credal, n8n, stb.</td>
+                    <td class="highlight">Helyi szereplők (gyenge)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Recommended Path -->
+    <div class="recommendation">
+        <h2>Javaslat: Opció C — "Vertical Deep"</h2>
+
+        <p>
+            A kutatás alapján az <strong class="highlight-text">Opció C</strong> a legerősebb pozíció a 1337 számára, mert:
+        </p>
+
+        <p>
+            <strong>1. A skills-ben hiszel</strong> — és a skills akkor a legerősebbek, ha domain-specifikusak.
+            Egy "Code Review" skill generikus, egy "SZKP Kérelem Feldolgozás" skill egyedi és lemásolhatatlan.
+        </p>
+
+        <p>
+            <strong>2. A nagy szereplők nem jönnek ide</strong> — Credal és Glean nem fognak magyar hitelezési
+            regulációkkal foglalkozni. Az AI Act és MNB compliance lokális tudást igényel.
+        </p>
+
+        <p>
+            <strong>3. Reference > Feature</strong> — A Credal story tanulsága: "We'd write a case study,
+            and then heads of platform engineering would reach out." Egy sikeres KAVOSZ deployment több ügyfelet hoz,
+            mint bármilyen feature list.
+        </p>
+
+        <p>
+            <strong>4. FDE + Product hybrid</strong> — Nem kell választani. Az FDE építi a vertikális megoldást,
+            a platform generalizálja. Ahogy Palantir tette: "Each FDE builds prototypes, the platform org generalizes."
+        </p>
+    </div>
+
+    <!-- Implementation Timeline -->
+    <section>
+        <h2>Javasolt Ütemterv (Opció C)</h2>
+
+        <div class="timeline">
+            <div class="timeline-phase">
+                <div class="phase-name">Fázis 1</div>
+                <div class="phase-title">KAVOSZ Reference</div>
+                <div class="phase-items">
+                    Demo Day (02.20) → Pilot → Production<br>
+                    6-8 skill, deep LIZI integráció
+                </div>
+            </div>
+            <div class="timeline-phase">
+                <div class="phase-name">Fázis 2</div>
+                <div class="phase-title">FSI Expand</div>
+                <div class="phase-items">
+                    2-3 másik magyar pénzügyi cég<br>
+                    Case study-k, word-of-mouth
+                </div>
+            </div>
+            <div class="timeline-phase">
+                <div class="phase-name">Fázis 3</div>
+                <div class="phase-title">Vertical Generalize</div>
+                <div class="phase-items">
+                    FSI Skills Library<br>
+                    Más CEE piacok
+                </div>
+            </div>
+            <div class="timeline-phase">
+                <div class="phase-name">Fázis 4</div>
+                <div class="phase-title">Platform Play</div>
+                <div class="phase-items">
+                    Horizontal platform, more verticals<br>
+                    (Engineering, Legal, HR)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Practices -->
+    <div class="best-practices">
+        <h4>Beépített Best Practices (kutatásból)</h4>
+        <ul>
+            <li><strong>Governance first:</strong> "75% of leaders prioritize security, compliance, auditability as most critical" — építsd be az MVP-be</li>
+            <li><strong>Data readiness:</strong> A Gartner szerint ez a #1 failure ok — az FDE pont ezt oldja meg</li>
+            <li><strong>Multi-agent:</strong> Dust tapasztalata: "specialized agents outperform single general-purpose" — a skills modell pont ez</li>
+            <li><strong>Case study driven GTM:</strong> Credal: "We'd write a case study, heads of engineering would reach out" — KAVOSZ = első case study</li>
+            <li><strong>Hybrid PLG + Sales:</strong> "Land with PLG, expand with sales" — self-service demo + FDE engagement</li>
+            <li><strong>Build on platform, not from scratch:</strong> MCP, Claude Code SDK, Craft Agent — ne újra feltalálni a kereket</li>
+        </ul>
+    </div>
+
+    <footer>
+        <div class="footer-logo">1337</div>
+        <p>The Intelligence Company</p>
+
+        <div class="sources">
+            <h4>Források</h4>
+            <p>
+                <a href="https://beetroot.co/ai-ml/enterprise-guide-to-scoping-ai-mvps-balancing-risk-cost-speed/" target="_blank">Enterprise Guide to AI MVPs</a> •
+                <a href="https://kpmg.com/us/en/media/news/q4-ai-pulse.html" target="_blank">KPMG AI Pulse 2026</a> •
+                <a href="https://www.svpg.com/forward-deployed-engineers/" target="_blank">SVPG on FDEs</a> •
+                <a href="https://newsletter.pragmaticengineer.com/p/forward-deployed-engineers" target="_blank">Pragmatic Engineer on FDEs</a> •
+                <a href="https://www.frontlines.io/from-product-failure-to-30-monthly-growth-the-credal-pivot-story/" target="_blank">Credal Pivot Story</a> •
+                <a href="https://sequoiacap.com/podcast/training-data-dust/" target="_blank">Dust Founders on Sequoia</a> •
+                <a href="https://dust.tt/blog/build-vs-buy-ai-agents" target="_blank">Dust: Build vs Buy</a> •
+                <a href="https://productled.com/blog/ai-product-led-growth-how-saas-startups-scale-to-100m-arr-faster" target="_blank">AI + PLG Guide</a>
+            </p>
+        </div>
+
+        <p style="margin-top: 20px; font-size: 10px;">
+            2026-02-07 • Stratégiai döntési dokumentum • Confidential
+        </p>
+    </footer>
+</div>
+
+</body>
+</html>
