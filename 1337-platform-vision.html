@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1337 Platform Vízió — Tooling Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FBFAF4;
+            --bg-warm: #EAEBE4;
+            --text: #111111;
+            --text-secondary: #78716c;
+            --accent: #783FF3;
+            --accent-light: rgba(120,63,243,0.1);
+            --orange: #FA7E00;
+            --orange-light: rgba(250,126,0,0.1);
+            --success: #16a34a;
+            --success-light: rgba(22,163,74,0.1);
+            --warning: #dc2626;
+            --warning-light: rgba(220,38,38,0.1);
+            --stone-dark: #1c1917;
+            --stone: #44403c;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid var(--bg-warm);
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .doc-meta {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .meta-item {
+            font-size: 11px;
+        }
+
+        .meta-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-weight: 500;
+        }
+
+        /* Title */
+        .doc-title {
+            font-size: 48px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .doc-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        /* Hero Statement */
+        .hero-statement {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 60px 40px;
+            margin: 50px -40px;
+            text-align: center;
+        }
+
+        .hero-statement h2 {
+            font-size: 36px;
+            color: var(--bg);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .hero-statement p {
+            font-size: 16px;
+            color: #a8a29e;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .hero-statement .highlight {
+            color: var(--accent);
+        }
+
+        /* Differentiators */
+        .differentiators {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 50px 0;
+        }
+
+        .diff-card {
+            background: var(--bg-warm);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .diff-card .icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .diff-card h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .diff-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Sections */
+        section {
+            margin: 50px 0;
+        }
+
+        section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        section h2 .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-size: 20px;
+            margin: 30px 0 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bg-warm);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+
+        .comparison-table th {
+            background: var(--stone-dark);
+            color: var(--bg);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-warm);
+            vertical-align: top;
+        }
+
+        .comparison-table tr:hover td {
+            background: var(--bg-warm);
+        }
+
+        .comparison-table .highlight-col {
+            background: var(--accent-light);
+        }
+
+        /* Architecture Diagram */
+        .architecture {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 30px -40px;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .architecture h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            margin-bottom: 24px;
+            color: var(--bg);
+            border: none;
+            padding: 0;
+        }
+
+        .architecture pre {
+            font-size: 10px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        /* Skill Card */
+        .skill-example {
+            background: var(--bg-warm);
+            padding: 24px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .skill-example h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .skill-example pre {
+            font-size: 11px;
+            line-height: 1.6;
+            background: white;
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        /* Tier Cards */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .tier-card {
+            background: white;
+            border: 2px solid var(--bg-warm);
+            padding: 24px;
+            position: relative;
+        }
+
+        .tier-card.featured {
+            border-color: var(--accent);
+        }
+
+        .tier-card .tier-name {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .tier-card .tier-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .tier-card .tier-price span {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .tier-card ul {
+            list-style: none;
+            font-size: 11px;
+        }
+
+        .tier-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-warm);
+        }
+
+        .tier-card li:last-child {
+            border: none;
+        }
+
+        /* FDE Section */
+        .fde-highlight {
+            background: linear-gradient(135deg, var(--accent) 0%, #5a2eb8 100%);
+            color: white;
+            padding: 40px;
+            margin: 30px -40px;
+        }
+
+        .fde-highlight h3 {
+            font-size: 24px;
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 20px;
+        }
+
+        .fde-highlight p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .fde-activities {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .fde-activity {
+            background: rgba(255,255,255,0.1);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .fde-activity .num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .fde-activity .title {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .fde-activity .desc {
+            font-size: 9px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* Capability Grid */
+        .capability-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .capability-card {
+            background: var(--bg-warm);
+            padding: 24px;
+        }
+
+        .capability-card.available {
+            border-left: 4px solid var(--success);
+        }
+
+        .capability-card.coming {
+            border-left: 4px solid var(--orange);
+        }
+
+        .capability-card.planned {
+            border-left: 4px solid var(--accent);
+        }
+
+        .capability-card h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .capability-card .status {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .capability-card.available .status { color: var(--success); }
+        .capability-card.coming .status { color: var(--orange); }
+        .capability-card.planned .status { color: var(--accent); }
+
+        .capability-card ul {
+            list-style: none;
+            font-size: 11px;
+        }
+
+        .capability-card li {
+            padding: 4px 0;
+        }
+
+        /* Demo Checklist */
+        .demo-checklist {
+            background: var(--bg-warm);
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .demo-checklist h4 {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .demo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 12px;
+        }
+
+        .demo-item .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--stone);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .demo-item .checkbox.done {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        /* Risk Table */
+        .risk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 11px;
+        }
+
+        .risk-table th {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .risk-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--bg-warm);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-size: 9px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-high {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .badge-medium {
+            background: var(--orange-light);
+            color: var(--orange);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--bg-warm);
+            margin-top: 60px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .contacts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .contacts .role {
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        /* Print */
+        @media print {
+            .container { max-width: 100%; padding: 20px; }
+            .hero-statement, .architecture, .fde-highlight { margin: 30px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">1337</div>
+        <div class="tagline">The Intelligence Company</div>
+
+        <div class="doc-meta">
+            <div class="meta-item">
+                <div class="meta-label">Dokumentum</div>
+                <div class="meta-value">Platform Vízió</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Verzió</div>
+                <div class="meta-value">1.0 — 2026. február 7.</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Státusz</div>
+                <div class="meta-value">Demo Day Ready</div>
+            </div>
+        </div>
+    </header>
+
+    <h1 class="doc-title">1337 Platform</h1>
+    <p class="doc-subtitle">Capability Platform for Enterprises — Tooling Vízió</p>
+
+    <!-- Hero Statement -->
+    <div class="hero-statement">
+        <h2>Nem AI tool.<br>Egy rendszer ami <span class="highlight">húzza a csapatot</span>.</h2>
+        <p>
+            A 1337 Platform megkülönbözteti magát azzal, hogy Forward Deployed Engineering modellel segít
+            framework-öket, skill-eket, workflow-kat építeni — nem csak "itt a ChatGPT, használjátok".
+        </p>
+    </div>
+
+    <!-- Differentiators -->
+    <div class="differentiators">
+        <div class="diff-card">
+            <div class="icon">🔧</div>
+            <h4>FDE Modell</h4>
+            <p>Helyszíni mérnökök akik együtt építik a skill-eket az ügyféllel</p>
+        </div>
+        <div class="diff-card">
+            <div class="icon">🤖</div>
+            <h4>Valódi Agent-ek</h4>
+            <p>Custom skill-ekkel és MCP integrációkkal, nem chat wrapper</p>
+        </div>
+        <div class="diff-card">
+            <div class="icon">🔒</div>
+            <h4>On-Premise</h4>
+            <p>Lokális futtatás lehetősége, FSI-grade compliance</p>
+        </div>
+        <div class="diff-card">
+            <div class="icon">📚</div>
+            <h4>1337 IP</h4>
+            <p>Consulting tudás productizálva a platformba</p>
+        </div>
+    </div>
+
+    <!-- Comparison -->
+    <section>
+        <h2><span class="section-num">01</span> Alapvető Pozicionálás</h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Dimenzió</th>
+                    <th>Hagyományos AI Tool</th>
+                    <th class="highlight-col">1337 Platform</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Setup</strong></td>
+                    <td>"Itt a ChatGPT, használjátok"</td>
+                    <td class="highlight-col">FDE segít beállítani, skill-eket építeni</td>
+                </tr>
+                <tr>
+                    <td><strong>Tudás</strong></td>
+                    <td>Általános LLM tudás</td>
+                    <td class="highlight-col">Consulting IP + céges kontextus</td>
+                </tr>
+                <tr>
+                    <td><strong>Integráció</strong></td>
+                    <td>Nincs vagy limitált</td>
+                    <td class="highlight-col">MCP-n keresztül bármihez csatlakozik</td>
+                </tr>
+                <tr>
+                    <td><strong>Fejlődés</strong></td>
+                    <td>Statikus</td>
+                    <td class="highlight-col">Folyamatos platform + skill fejlesztés</td>
+                </tr>
+                <tr>
+                    <td><strong>Adatbiztonság</strong></td>
+                    <td>Cloud, adatok kimennek</td>
+                    <td class="highlight-col">On-premise opció, FSI-grade</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Architecture -->
+    <div class="architecture">
+        <h3>Technikai Architektúra</h3>
+        <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           1337 PLATFORM                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐         │
+│   │   Craft Agent   │  │    Web UI       │  │      CLI        │  ← Interface
+│   │                 │  │    Dashboard    │  │                 │    Layer
+│   └────────┬────────┘  └────────┬────────┘  └────────┬────────┘         │
+│            │                    │                    │                   │
+│   ┌────────┴────────────────────┴────────────────────┴────────┐         │
+│   │                    Core Agent Engine                       │         │
+│   │    - Skill routing & orchestration                         │         │
+│   │    - Context management                                    │         │
+│   │    - Tool execution                                        │         │
+│   └────────────────────────────┬───────────────────────────────┘         │
+│                                │                                         │
+│   ┌────────────────────────────┴───────────────────────────────┐         │
+│   │                      Skill Layer                            │         │
+│   │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │         │
+│   │   │  Code    │ │   Doc    │ │ Lending  │ │  Custom  │      │  ← Skills
+│   │   │  Review  │ │  Writer  │ │   Ops    │ │   ...    │      │         │
+│   │   └──────────┘ └──────────┘ └──────────┘ └──────────┘      │         │
+│   └────────────────────────────┬───────────────────────────────┘         │
+│                                │                                         │
+│   ┌────────────────────────────┴───────────────────────────────┐         │
+│   │                Integration Layer (MCP)                      │         │
+│   │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │  ← MCP
+│   │   │  GitLab  │ │   JIRA   │ │   LIZI   │ │   CRM    │      │    Servers
+│   │   └──────────┘ └──────────┘ └──────────┘ └──────────┘      │         │
+│   └────────────────────────────┬───────────────────────────────┘         │
+│                                │                                         │
+│   ┌────────────────────────────┴───────────────────────────────┐         │
+│   │                      Model Layer                            │         │
+│   │   ┌───────────────────┐    ┌───────────────────┐           │  ← LLM
+│   │   │  Lokális LLM      │    │   Cloud LLM       │           │    Options
+│   │   │  (K2.5, Ollama)   │    │   (Claude, GPT)   │           │         │
+│   │   └───────────────────┘    └───────────────────┘           │         │
+│   └─────────────────────────────────────────────────────────────┘         │
+└─────────────────────────────────────────────────────────────────────────┘
+        </pre>
+    </div>
+
+    <!-- Skill Architecture -->
+    <section>
+        <h2><span class="section-num">02</span> Skill Architektúra</h2>
+
+        <p style="margin-bottom: 20px;">Egy <strong>skill</strong> a platformon egy önálló képesség, ami prompt-okat, tool-okat és kontextust kombinál.</p>
+
+        <div class="skill-example">
+            <h4>SKILL.md Példa</h4>
+            <pre>---
+name: Code Review
+description: Enterprise-grade code review security, quality, performance
+icon: code-review.svg
+triggers:
+  - "review"
+  - "check code"
+  - "security audit"
+---
+
+[Skill prompt és instrukciók...]</pre>
+        </div>
+
+        <h3>Skill Komponensek</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Komponens</th>
+                    <th>Leírás</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Prompt/Instructions</strong></td>
+                    <td>Mit tud és hogyan viselkedik a skill</td>
+                </tr>
+                <tr>
+                    <td><strong>Tools</strong></td>
+                    <td>Milyen MCP tool-okat használhat (GitLab, JIRA, CRM...)</td>
+                </tr>
+                <tr>
+                    <td><strong>Context</strong></td>
+                    <td>Milyen céges kontextust lát (docs, history, preferences)</td>
+                </tr>
+                <tr>
+                    <td><strong>Triggers</strong></td>
+                    <td>Mikor aktiválódik automatikusan</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- FDE Highlight -->
+    <div class="fde-highlight">
+        <h3>Forward Deployed Engineering (FDE)</h3>
+        <p>
+            A Palantir modell adaptálva AI platformra. Dedikált 1337 mérnök(ök) akik az ügyfélnél dolgoznak —
+            nem "itt a tool, boldogulj", hanem "együtt építjük amit neked kell".
+        </p>
+
+        <div class="fde-activities">
+            <div class="fde-activity">
+                <div class="num">1</div>
+                <div class="title">Discovery</div>
+                <div class="desc">Céges folyamatok megértése</div>
+            </div>
+            <div class="fde-activity">
+                <div class="num">2</div>
+                <div class="title">Skill Design</div>
+                <div class="desc">Use case-ekre tervezés</div>
+            </div>
+            <div class="fde-activity">
+                <div class="num">3</div>
+                <div class="title">Integration</div>
+                <div class="desc">MCP server-ek építése</div>
+            </div>
+            <div class="fde-activity">
+                <div class="num">4</div>
+                <div class="title">Training</div>
+                <div class="desc">Csapat felkészítése</div>
+            </div>
+            <div class="fde-activity">
+                <div class="num">5</div>
+                <div class="title">Iteration</div>
+                <div class="desc">Feedback-alapú fejlesztés</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Tiers -->
+    <section>
+        <h2><span class="section-num">03</span> Go-to-Market</h2>
+
+        <div class="tier-grid">
+            <div class="tier-card">
+                <div class="tier-name">Starter</div>
+                <div class="tier-price">€5k<span>/év</span></div>
+                <ul>
+                    <li>Self-service platform</li>
+                    <li>Pre-built skill-ek</li>
+                    <li>Cloud only</li>
+                    <li>Community support</li>
+                </ul>
+            </div>
+
+            <div class="tier-card featured">
+                <div class="tier-name">Professional</div>
+                <div class="tier-price">€20k<span>/év</span></div>
+                <ul>
+                    <li>Platform + Setup Support</li>
+                    <li>Pre-built + limited custom</li>
+                    <li>Cloud only</li>
+                    <li>Email support</li>
+                </ul>
+            </div>
+
+            <div class="tier-card">
+                <div class="tier-name">Enterprise</div>
+                <div class="tier-price">€50k+<span>/év</span></div>
+                <ul>
+                    <li>FDE + Platform + Ongoing</li>
+                    <li>Custom skills, integrációk</li>
+                    <li>On-premise opció</li>
+                    <li>Dedicated support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section>
+        <h2><span class="section-num">04</span> Capability Területek</h2>
+
+        <div class="capability-grid">
+            <div class="capability-card available">
+                <h4>Engineering</h4>
+                <div class="status">Elérhető</div>
+                <ul>
+                    <li>Code Review (security, quality)</li>
+                    <li>Documentation</li>
+                    <li>Test Writer</li>
+                    <li>Refactor</li>
+                    <li>Architecture</li>
+                </ul>
+            </div>
+
+            <div class="capability-card coming">
+                <h4>Operations</h4>
+                <div class="status">Fejlesztés alatt</div>
+                <ul>
+                    <li>Lending Ops (KAVOSZ)</li>
+                    <li>Incident Response</li>
+                    <li>Monitoring Setup</li>
+                    <li>Capacity Planning</li>
+                </ul>
+            </div>
+
+            <div class="capability-card planned">
+                <h4>Sales & Marketing</h4>
+                <div class="status">Tervezett</div>
+                <ul>
+                    <li>CRM Enrichment</li>
+                    <li>Outreach Drafting</li>
+                    <li>Pipeline Analysis</li>
+                    <li>Proposal Generation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Day -->
+    <section>
+        <h2><span class="section-num">05</span> Demo Day (2026-02-20)</h2>
+
+        <div class="demo-checklist">
+            <h4>Elkészült</h4>
+            <div class="demo-item">
+                <div class="checkbox done">✓</div>
+                <div>Landing page: presentations/1337-platform-landing/index-interactive.html</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox done">✓</div>
+                <div>Interaktív HTML demo (Dorsum + KAVOSZ)</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox done">✓</div>
+                <div>KAVOSZ Mock MCP Server (6 tool)</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox done">✓</div>
+                <div>Theme (1337 brand colors)</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox done">✓</div>
+                <div>Skill-ek: Code Review, Documentation</div>
+            </div>
+        </div>
+
+        <div class="demo-checklist" style="background: var(--orange-light);">
+            <h4>Még hátra van</h4>
+            <div class="demo-item">
+                <div class="checkbox"></div>
+                <div>Dorsum Mock MCP Server (GitLab, JIRA)</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox"></div>
+                <div>Demo script véglegesítés</div>
+            </div>
+            <div class="demo-item">
+                <div class="checkbox"></div>
+                <div>Pitch deck a Demo Day-re</div>
+            </div>
+        </div>
+
+        <h3>KAVOSZ Demo Forgatókönyv</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Lépés</th>
+                    <th>Kérdés</th>
+                    <th>Tool</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>"Nézd át a mai kérelmeket"</td>
+                    <td>lizi_list_applications</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>"Küldd ki a hiánypótlásokat"</td>
+                    <td>crm_prepare_email</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>"Igen, mehet"</td>
+                    <td>crm_send_bulk_emails</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>"Mi a helyzet az SZKP-2024-1849-cel?"</td>
+                    <td>lizi_get_application</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Risks -->
+    <section>
+        <h2><span class="section-num">06</span> Kockázatok</h2>
+
+        <table class="risk-table">
+            <thead>
+                <tr>
+                    <th>Kockázat</th>
+                    <th>Valószínűség</th>
+                    <th>Hatás</th>
+                    <th>Mitigáció</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AI Act compliance</td>
+                    <td><span class="badge badge-high">Magas</span></td>
+                    <td><span class="badge badge-high">Magas</span></td>
+                    <td>Korai felkészülés, dokumentáció</td>
+                </tr>
+                <tr>
+                    <td>LLM költségek</td>
+                    <td><span class="badge badge-medium">Közepes</span></td>
+                    <td><span class="badge badge-medium">Közepes</span></td>
+                    <td>Lokális LLM opció</td>
+                </tr>
+                <tr>
+                    <td>Adoption failure</td>
+                    <td><span class="badge badge-medium">Közepes</span></td>
+                    <td><span class="badge badge-high">Magas</span></td>
+                    <td>FDE modell, training</td>
+                </tr>
+                <tr>
+                    <td>Versenytársak</td>
+                    <td><span class="badge badge-high">Magas</span></td>
+                    <td><span class="badge badge-medium">Közepes</span></td>
+                    <td>FDE megkülönböztetés</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <div class="footer-logo">1337</div>
+        <p>The Intelligence Company</p>
+
+        <div class="contacts">
+            <div>
+                <div class="role">Product Owner</div>
+                <strong>Bendi</strong>
+            </div>
+            <div>
+                <div class="role">Tech Lead</div>
+                <strong>Ádám</strong>
+            </div>
+            <div>
+                <div class="role">FDE & Strategy</div>
+                <strong>János</strong>
+            </div>
+        </div>
+
+        <p style="margin-top: 30px; font-size: 10px;">
+            Ez a dokumentum a 1337 Platform tooling víziójának master reference dokumentuma.<br>
+            Frissítsd ahogy a vízió fejlődik.
+        </p>
+    </footer>
+</div>
+
+</body>
+</html>

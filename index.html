@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1337 Platform — Stratégiai Dokumentumok</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #FBFAF4;
+            --bg-warm: #EAEBE4;
+            --text: #111111;
+            --text-secondary: #78716c;
+            --accent: #783FF3;
+            --accent-light: rgba(120,63,243,0.1);
+            --orange: #FA7E00;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 500px;
+            text-align: center;
+        }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        .docs {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .doc-link {
+            display: block;
+            background: var(--bg-warm);
+            padding: 24px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .doc-link:hover {
+            border-left-color: var(--accent);
+            transform: translateX(4px);
+        }
+        .doc-link h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        .doc-link p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">1337</div>
+        <div class="tagline">The Intelligence Company</div>
+
+        <h1>Stratégiai Dokumentumok</h1>
+
+        <div class="docs">
+            <a href="1337-platform-vision.html" class="doc-link">
+                <h2>Platform Vízió</h2>
+                <p>Tooling stratégia, FDE modell, architektúra</p>
+            </a>
+
+            <a href="competitor-analysis.html" class="doc-link">
+                <h2>Versenytárs Elemzés</h2>
+                <p>Credal, Glean, Dust, Palantir + 15 platform</p>
+            </a>
+
+            <a href="regulatory-analysis.html" class="doc-link">
+                <h2>Szabályozási Elemzés</h2>
+                <p>EU AI Act, GDPR, MNB, DORA</p>
+            </a>
+        </div>
+
+        <footer>
+            Demo Day: 2026-02-20 | Confidential
+        </footer>
+    </div>
+</body>
+</html>

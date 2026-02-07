@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szabályozási Elemzés — 1337 Partners</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FBFAF4;
+            --bg-warm: #EAEBE4;
+            --text: #111111;
+            --text-secondary: #78716c;
+            --accent: #783FF3;
+            --accent-light: rgba(120,63,243,0.1);
+            --orange: #FA7E00;
+            --orange-light: rgba(250,126,0,0.1);
+            --success: #16a34a;
+            --success-light: rgba(22,163,74,0.1);
+            --warning: #dc2626;
+            --warning-light: rgba(220,38,38,0.1);
+            --stone-dark: #1c1917;
+            --stone: #44403c;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid var(--bg-warm);
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .doc-meta {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .meta-item {
+            font-size: 11px;
+        }
+
+        .meta-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-weight: 500;
+        }
+
+        /* Title */
+        .doc-title {
+            font-size: 42px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .doc-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 50px -40px;
+            border-radius: 0;
+        }
+
+        .executive-summary h2 {
+            font-size: 24px;
+            color: var(--bg);
+            margin-bottom: 24px;
+        }
+
+        .key-findings {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .finding {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .finding-number {
+            font-size: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .finding h4 {
+            font-size: 16px;
+            color: var(--bg);
+            margin-bottom: 8px;
+        }
+
+        .finding p {
+            font-size: 12px;
+            color: #a8a29e;
+            line-height: 1.6;
+        }
+
+        /* Sections */
+        section {
+            margin: 50px 0;
+        }
+
+        section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        section h2 .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-size: 20px;
+            margin: 30px 0 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bg-warm);
+        }
+
+        section h4 {
+            font-size: 16px;
+            margin: 20px 0 12px;
+            color: var(--stone);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+
+        th {
+            background: var(--stone-dark);
+            color: var(--bg);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-warm);
+            vertical-align: top;
+        }
+
+        tr:hover td {
+            background: var(--bg-warm);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-critical {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .badge-high {
+            background: var(--orange-light);
+            color: var(--orange);
+        }
+
+        .badge-medium {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .badge-success {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        /* Timeline */
+        .timeline {
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 20px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--bg-warm);
+        }
+
+        .timeline-date {
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        .timeline-date.past {
+            color: var(--success);
+        }
+
+        .timeline-content h4 {
+            margin: 0 0 4px;
+            font-size: 14px;
+        }
+
+        .timeline-content p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Risk Matrix */
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 30px 0;
+        }
+
+        .risk-card {
+            padding: 20px;
+            background: var(--bg-warm);
+        }
+
+        .risk-card.critical {
+            border-left: 4px solid var(--warning);
+        }
+
+        .risk-card.high {
+            border-left: 4px solid var(--orange);
+        }
+
+        .risk-card.medium {
+            border-left: 4px solid var(--accent);
+        }
+
+        .risk-card h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .risk-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Checklist */
+        .checklist {
+            margin: 20px 0;
+        }
+
+        .checklist-section {
+            margin-bottom: 30px;
+        }
+
+        .checklist-section h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: var(--bg-warm);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--bg-warm);
+            font-size: 12px;
+        }
+
+        .checklist-box {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--stone);
+            border-radius: 2px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Recommendations */
+        .recommendation {
+            background: var(--bg-warm);
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .recommendation h4 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .recommendation p {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .recommendation ul {
+            margin-left: 20px;
+            font-size: 12px;
+        }
+
+        .recommendation li {
+            margin: 6px 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--bg-warm);
+            margin-top: 60px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 16px;
+            background: var(--bg-warm);
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Print */
+        @media print {
+            .container { max-width: 100%; padding: 20px; }
+            .executive-summary { margin: 30px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">1337</div>
+        <div class="tagline">The Intelligence Company</div>
+
+        <div class="doc-meta">
+            <div class="meta-item">
+                <div class="meta-label">Dokumentum</div>
+                <div class="meta-value">Szabályozási Elemzés</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Dátum</div>
+                <div class="meta-value">2026. február 7.</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Titkosság</div>
+                <div class="meta-value">Belső használatra</div>
+            </div>
+        </div>
+    </header>
+
+    <h1 class="doc-title">Enterprise AI Agent Platform: Szabályozási Környezet</h1>
+    <p class="doc-subtitle">Magyarország és az Európai Unió — McKinsey-szintű elemzés</p>
+
+    <!-- Executive Summary -->
+    <div class="executive-summary">
+        <h2>Vezetői Összefoglaló</h2>
+        <p style="font-size: 14px; line-height: 1.8; color: #d6d3d1;">
+            A 1337 Partners AI agent platform európai működtetésének szabályozási környezete jelentős komplexitást mutat. Az EU AI Act, GDPR, magyar nemzeti szabályozás (NAIH, MNB) és a szektorspecifikus előírások (DORA) együttesen határozzák meg a megfelelőségi követelményeket.
+        </p>
+
+        <div class="key-findings">
+            <div class="finding">
+                <div class="finding-number">Kockázati Besorolás</div>
+                <h4>Limited Risk vagy High-Risk</h4>
+                <p>A platform a felhasználási módtól függően kerül besorolásra. FSI ügyfelek esetén (hitelbírálat, ügyfélszelekcía) automatikusan high-risk.</p>
+            </div>
+            <div class="finding">
+                <div class="finding-number">Kritikus Határidő</div>
+                <h4>2026. augusztus 2.</h4>
+                <p>High-risk AI rendszerek teljes körű szabályozása életbe lép. Conformity assessment, CE jelölés, EU adatbázis regisztráció kötelező.</p>
+            </div>
+            <div class="finding">
+                <div class="finding-number">Pénzügyi Kockázat</div>
+                <h4>35M EUR / 7% árbevétel</h4>
+                <p>Maximális bírság nem megfelelés esetén (EU AI Act), kiegészítve GDPR (20M EUR / 4%) és MNB szankciókkal.</p>
+            </div>
+            <div class="finding">
+                <div class="finding-number">FSI Szektor</div>
+                <h4>DORA + MNB Ajánlás</h4>
+                <p>DORA 2025.01.17-től hatályos, MNB 13/2025 ajánlás 2026 áprilistól alkalmazandó. Fokozott ICT kockázatkezelés.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Szabályozási Mátrix -->
+    <section>
+        <h2><span class="section-num">01</span> Szabályozási Mátrix</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Szabályozás</th>
+                    <th>Hatály</th>
+                    <th>Határidő</th>
+                    <th>Kritikusság</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>EU AI Act</strong><br><span style="color: var(--text-secondary); font-size: 11px;">2024/1689</span></td>
+                    <td>EU szintű, közvetlenül alkalmazandó</td>
+                    <td>2025.02.02 → 2026.08.02</td>
+                    <td><span class="badge badge-critical">Kritikus</span></td>
+                </tr>
+                <tr>
+                    <td><strong>GDPR</strong><br><span style="color: var(--text-secondary); font-size: 11px;">Art. 22, DPIA</span></td>
+                    <td>EU adatkezelés</td>
+                    <td>Folyamatos</td>
+                    <td><span class="badge badge-critical">Kritikus</span></td>
+                </tr>
+                <tr>
+                    <td><strong>MNB 13/2025</strong><br><span style="color: var(--text-secondary); font-size: 11px;">MI Ajánlás</span></td>
+                    <td>Magyar pénzügyi szektor</td>
+                    <td>2026.04.01 (szabályok)<br>2026.06.30 (stratégia)</td>
+                    <td><span class="badge badge-critical">Kritikus (FSI)</span></td>
+                </tr>
+                <tr>
+                    <td><strong>DORA</strong><br><span style="color: var(--text-secondary); font-size: 11px;">Digital Operational Resilience</span></td>
+                    <td>EU pénzügyi szektor + ICT szolgáltatók</td>
+                    <td>2025.01.17-től hatályos</td>
+                    <td><span class="badge badge-critical">Kritikus (FSI)</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Product Liability Directive</strong><br><span style="color: var(--text-secondary); font-size: 11px;">2024/2853</span></td>
+                    <td>EU termékfelelősség (AI = termék)</td>
+                    <td>2026.12.09</td>
+                    <td><span class="badge badge-high">Magas</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- EU AI Act Timeline -->
+    <section>
+        <h2><span class="section-num">02</span> EU AI Act Ütemterv</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date past">2024.08.01</div>
+                <div class="timeline-content">
+                    <h4>AI Act hatályba lépett</h4>
+                    <p>Az EU AI Act hivatalosan hatályba lépett</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date past">2025.02.02</div>
+                <div class="timeline-content">
+                    <h4>Tiltott AI praktikák + AI Literacy</h4>
+                    <p>Tiltott AI rendszerek tilalma, munkavállalói AI képzés kötelező</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025.08.02</div>
+                <div class="timeline-content">
+                    <h4>GPAI szabályozás + Bírságok</h4>
+                    <p>General Purpose AI modellek szabályozása, bírságrendszer hatályos, AI Office operatív</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2026.08.02</div>
+                <div class="timeline-content">
+                    <h4>High-Risk AI teljes szabályozás</h4>
+                    <p>Conformity assessment, CE jelölés, EU adatbázis regisztráció, transparency szabályok</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>High-Risk Besorolás (Annex III)</h3>
+        <p style="margin-bottom: 16px;">A platform automatikusan <strong>high-risk</strong> minősítésű, ha:</p>
+
+        <div class="risk-matrix">
+            <div class="risk-card critical">
+                <h4>Hitelbírálat</h4>
+                <p>Hitelképesség értékelés, kockázatbesorolás bankoknál</p>
+            </div>
+            <div class="risk-card critical">
+                <h4>HR / Toborzás</h4>
+                <p>Munkavállalói értékelés, CV szűrés, teljesítmény értékelés</p>
+            </div>
+            <div class="risk-card high">
+                <h4>Kritikus Infrastruktúra</h4>
+                <p>Energetika, közművek, safety-critical rendszerek</p>
+            </div>
+        </div>
+
+        <h3>Bírságok</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Jogsértés típusa</th>
+                    <th>Maximum bírság</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tiltott AI praktikák</td>
+                    <td><strong>35 M EUR</strong> vagy globális árbevétel 7%-a</td>
+                </tr>
+                <tr>
+                    <td>High-risk, GPAI kötelezettségek</td>
+                    <td><strong>15 M EUR</strong> vagy globális árbevétel 3%-a</td>
+                </tr>
+                <tr>
+                    <td>Helytelen információ hatóságnak</td>
+                    <td><strong>7.5 M EUR</strong> vagy globális árbevétel 1%-a</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Kockázati Térkép -->
+    <section>
+        <h2><span class="section-num">03</span> Kockázati Térkép</h2>
+
+        <h3>Kritikus kockázatok (azonnali beavatkozás)</h3>
+        <div class="risk-matrix">
+            <div class="risk-card critical">
+                <h4>EU AI Act High-Risk</h4>
+                <p>FSI use cases, 2026.08.02 határidő, conformity assessment</p>
+            </div>
+            <div class="risk-card critical">
+                <h4>DORA Megfelelés</h4>
+                <p>ICT kockázatkezelés, 2025.01.17-től hatályos</p>
+            </div>
+            <div class="risk-card critical">
+                <h4>MNB MI Ajánlás</h4>
+                <p>2026.04.01 határidő, MI alstratégia szükséges</p>
+            </div>
+        </div>
+
+        <h3>Magas kockázatok (6 hónapon belül)</h3>
+        <div class="risk-matrix">
+            <div class="risk-card high">
+                <h4>USA Adattovábbítás</h4>
+                <p>SCC implementáció, TIA elvégzése LLM API hívásokhoz</p>
+            </div>
+            <div class="risk-card high">
+                <h4>GDPR Art. 22</h4>
+                <p>Automatikus döntéshozatal, DPIA kötelezettség</p>
+            </div>
+            <div class="risk-card high">
+                <h4>Felelősség / Liability</h4>
+                <p>Szerződéses klauzulák, AI felelősségbiztosítás</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Checklist -->
+    <section>
+        <h2><span class="section-num">04</span> Compliance Checklist</h2>
+
+        <div class="checklist">
+            <div class="checklist-section">
+                <h4>Azonnali teendők (0-3 hónap)</h4>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>AI inventory készítése</strong> — Összes AI rendszer/funkció feltérképezése</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>Kockázati besorolás</strong> — Minden AI rendszer EU AI Act szerinti kategorizálása</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>AI Literacy program</strong> — Munkavállalói képzés (2025.02.02-től kötelező)</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>Tiltott praktikák audit</strong> — Nincs-e tiltott AI használat</div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h4>Rövidtávú teendők (3-6 hónap)</h4>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>DPA felülvizsgálat</strong> — Anthropic/Claude DPA + SCC</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>Transfer Impact Assessment</strong> — USA adattovábbítás</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>DPIA-k elvégzése</strong> — Magas kockázatú adatkezelésekre</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>ICT kockázatkezelési keretrendszer</strong> — FSI ügyfelek számára</div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h4>FSI-specifikus (MNB)</h4>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>MI alstratégia kidolgozása</strong> — Határidő: 2026.06.30</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>Kockázati profil meghatározása</strong> — Dokumentált kockázatkezelési rendszer</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>Emberi felügyelet biztosítása</strong> — Nagy kockázatú MI-nél kötelező</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-box"></div>
+                    <div><strong>DORA megfelelés</strong> — ICT kockázatkezelés, incidens jelentés</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Javaslatok -->
+    <section>
+        <h2><span class="section-num">05</span> Stratégiai Javaslatok</h2>
+
+        <div class="recommendation">
+            <h4>A. Compliance-by-Design</h4>
+            <p>A platform eleve megfeleléskész legyen, csökkentve az ügyfelek compliance terheit.</p>
+            <ul>
+                <li>Logging infrastruktúra építés — GDPR + AI Act + DORA kompatibilis eseménynapló</li>
+                <li>Human-in-the-loop funkciók — Könnyen konfigurálható emberi felügyelet</li>
+                <li>Transparency modulok — Felhasználó tájékoztatási funkciók beépítése</li>
+                <li>Audit trail — Teljes nyomonkövethetőség</li>
+            </ul>
+        </div>
+
+        <div class="recommendation">
+            <h4>B. FSI Go-to-Market Stratégia</h4>
+            <p>A pénzügyi szektor specifikus igényeinek kiszolgálása.</p>
+            <ul>
+                <li><strong>"MNB-ready" platform</strong> — MI ajánlás megfelelőség beépítve</li>
+                <li><strong>DORA-kompatibilis ICT szolgáltatás</strong></li>
+                <li><strong>On-premise deployment opció</strong> — Adatszuverenitás biztosítása</li>
+                <li><strong>EU adatkezelés</strong> — Nincs USA adattovábbítás (lokális LLM opció)</li>
+            </ul>
+        </div>
+
+        <div class="recommendation">
+            <h4>C. Termékfejlesztési Prioritások</h4>
+            <p>Must-have features a high-risk compliance-hez:</p>
+            <ul>
+                <li><strong>Configurable Human Oversight</strong> — Approval workflows, escalation rules</li>
+                <li><strong>Comprehensive Audit Logging</strong> — 6+ hónap retention, exportálható</li>
+                <li><strong>Transparency Dashboard</strong> — AI használat indikátor, felhasználói jogok</li>
+                <li><strong>Risk Management Integration</strong> — Automatikus alertek, bias monitoring</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">1337</div>
+        <p>The Intelligence Company</p>
+
+        <div class="disclaimer">
+            Ez a dokumentum tájékoztató jellegű, nem minősül jogi tanácsadásnak. A konkrét megfelelés érdekében jogi szakértő bevonása javasolt.
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
