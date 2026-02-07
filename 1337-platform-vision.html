@@ -531,6 +531,109 @@
             margin-bottom: 4px;
         }
 
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            header {
+                padding-bottom: 24px;
+                margin-bottom: 30px;
+            }
+
+            .doc-meta {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 24px;
+            }
+
+            .doc-title {
+                font-size: 28px;
+            }
+
+            .doc-subtitle {
+                font-size: 14px;
+            }
+
+            .hero-statement {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .hero-statement h2 {
+                font-size: 22px;
+            }
+
+            .hero-bullets li {
+                font-size: 12px;
+            }
+
+            section h2 {
+                font-size: 22px;
+                flex-wrap: wrap;
+            }
+
+            section h3 {
+                font-size: 18px;
+            }
+
+            .architecture {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .arch-layer {
+                flex-direction: column;
+                gap: 8px;
+                padding: 16px;
+            }
+
+            .layer-name {
+                min-width: auto;
+            }
+
+            .layer-items {
+                flex-wrap: wrap;
+            }
+
+            .fde-highlight {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .fde-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contacts {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 16px 12px;
+            }
+
+            .doc-title {
+                font-size: 24px;
+            }
+
+            section h2 {
+                font-size: 20px;
+            }
+        }
+
         /* Print */
         @media print {
             .container { max-width: 100%; padding: 20px; }

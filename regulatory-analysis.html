@@ -401,6 +401,103 @@
             font-style: italic;
         }
 
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            header {
+                padding-bottom: 24px;
+                margin-bottom: 30px;
+            }
+
+            .doc-meta {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 24px;
+            }
+
+            .doc-title {
+                font-size: 28px;
+            }
+
+            .doc-subtitle {
+                font-size: 14px;
+            }
+
+            .executive-summary {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .executive-summary h2 {
+                font-size: 20px;
+            }
+
+            .key-findings {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .finding {
+                padding: 16px;
+            }
+
+            section h2 {
+                font-size: 22px;
+                flex-wrap: wrap;
+            }
+
+            section h3 {
+                font-size: 18px;
+            }
+
+            .reg-card {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .timeline {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                font-size: 10px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 16px 12px;
+            }
+
+            .doc-title {
+                font-size: 24px;
+            }
+
+            section h2 {
+                font-size: 20px;
+            }
+        }
+
         /* Print */
         @media print {
             .container { max-width: 100%; padding: 20px; }

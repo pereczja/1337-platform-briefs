@@ -446,6 +446,113 @@
             text-decoration: underline;
         }
 
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            header {
+                padding-bottom: 24px;
+                margin-bottom: 30px;
+            }
+
+            .doc-meta {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 24px;
+            }
+
+            .doc-title {
+                font-size: 28px;
+            }
+
+            .doc-subtitle {
+                font-size: 14px;
+            }
+
+            .executive-summary {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .executive-summary h2 {
+                font-size: 20px;
+            }
+
+            .key-findings {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .finding {
+                padding: 16px;
+            }
+
+            section h2 {
+                font-size: 22px;
+                flex-wrap: wrap;
+            }
+
+            section h3 {
+                font-size: 18px;
+            }
+
+            table {
+                font-size: 10px;
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                padding: 8px;
+                white-space: nowrap;
+            }
+
+            .competitor-card {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .strategic-matrix {
+                margin: 30px -16px;
+                padding: 24px 16px;
+            }
+
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 16px 12px;
+            }
+
+            .doc-title {
+                font-size: 24px;
+            }
+
+            .executive-summary {
+                margin: 20px -12px;
+                padding: 20px 12px;
+            }
+
+            section h2 {
+                font-size: 20px;
+            }
+
+            .finding p {
+                font-size: 11px;
+            }
+        }
+
         /* Print */
         @media print {
             .container { max-width: 100%; padding: 20px; }
