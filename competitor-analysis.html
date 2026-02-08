@@ -610,6 +610,11 @@
                 <h4>CEE / Magyar Piac</h4>
                 <p>EU AI Act compliance, MNB szabályozás, lokális jelenlét — globális játékosok nem fedik le.</p>
             </div>
+            <div class="finding">
+                <div class="finding-number">Kritikus Rés</div>
+                <h4>Legacy Integráció</h4>
+                <p>Credal/Glean modern SaaS-ra épít (Slack, Notion). Enterprise legacy-t (Oracle, COBOL, custom) senki nem old meg.</p>
+            </div>
         </div>
     </div>
 
@@ -1173,6 +1178,16 @@
                     <strong>Lehetőség:</strong> Nyílt skill/tool ecosystem (MCP). Low-code skill építés üzleti felhasználóknak. Partner ecosystem.
                 </div>
             </div>
+
+            <div class="whitespace-card" style="border-left: 3px solid var(--orange);">
+                <h4>E. Legacy Rendszer Integráció</h4>
+                <p><strong>Probléma:</strong> Credal, Glean, Dust modern SaaS-hoz csatlakoznak (Slack, Google, Notion).
+                   Enterprise legacy rendszerek (Oracle, SAP, COBOL, custom fejlesztések) integrációját <strong>senki nem vállalja</strong>.</p>
+                <div class="opportunity">
+                    <strong>Lehetőség:</strong> Custom MCP server építés legacy rendszerekhez. FDE-k helyszínen elemzik és bekötik a rendszereket.
+                    Opcionálisan: legacy rendszerek AI-native újraírása managed service-ként.
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1240,6 +1255,20 @@
                     <td><span class="badge badge-high">Részben</span></td>
                     <td><span class="badge badge-success">Igen</span></td>
                 </tr>
+                <tr style="background: var(--orange-light);">
+                    <td><strong>Legacy Integráció</strong></td>
+                    <td><span class="badge badge-success">Custom MCP</span></td>
+                    <td><span class="badge badge-critical">Csak SaaS</span></td>
+                    <td><span class="badge badge-critical">Csak SaaS</span></td>
+                    <td><span class="badge badge-success">Igen, de $$$</span></td>
+                </tr>
+                <tr style="background: var(--orange-light);">
+                    <td><strong>Legacy Újraírás</strong></td>
+                    <td><span class="badge badge-success">Opció</span></td>
+                    <td><span class="badge badge-critical">Nem</span></td>
+                    <td><span class="badge badge-critical">Nem</span></td>
+                    <td><span class="badge badge-high">Foundry</span></td>
+                </tr>
             </tbody>
         </table>
     </section>
@@ -1254,6 +1283,7 @@
                 <li><strong>Pozicionálás:</strong> "AI Capability Partner for European Mid-Market" — nem chat wrapper, nem $1M+ platform</li>
                 <li><strong>Go-to-market:</strong> 2-4 hetes "AI Bootcamp" (Palantir-inspired), $50-100k pilot szerződés</li>
                 <li><strong>Technikai:</strong> MCP kompatibilitás, on-premise deployment, 3-5 vertical starter kit</li>
+                <li><strong>Legacy Integráció:</strong> Custom MCP server építés ügyfelek legacy rendszereihez — ez a differenciáló</li>
             </ul>
         </div>
 
@@ -1263,6 +1293,7 @@
                 <li><strong>Partner Ecosystem:</strong> System integrátor partnerségek (CEE), technológiai partnerségek (Windsurf/LangChain MCP)</li>
                 <li><strong>Productization:</strong> Skill Marketplace, low-code skill builder, template library</li>
                 <li><strong>Expansion:</strong> DACH piac, FSI vertical fokusz</li>
+                <li><strong>Legacy Services:</strong> Opcionális legacy rendszer újraírás szolgáltatás — ahol az ügyfél ezt kéri, AI-native replacement</li>
             </ul>
         </div>
 
