@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Rendszerek & Ügyfél Stratégia — 1337 Partners</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FBFAF4;
+            --bg-warm: #EAEBE4;
+            --text: #111111;
+            --text-secondary: #78716c;
+            --accent: #783FF3;
+            --accent-light: rgba(120,63,243,0.1);
+            --orange: #FA7E00;
+            --orange-light: rgba(250,126,0,0.1);
+            --success: #16a34a;
+            --success-light: rgba(22,163,74,0.1);
+            --warning: #dc2626;
+            --warning-light: rgba(220,38,38,0.1);
+            --stone-dark: #1c1917;
+            --stone: #44403c;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--bg-warm);
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .doc-title {
+            font-size: 42px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .doc-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        /* Sections */
+        section {
+            margin: 50px 0;
+        }
+
+        section h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        section h2 .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-size: 20px;
+            margin: 30px 0 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bg-warm);
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        /* Context Box */
+        .context-box {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 40px -40px;
+        }
+
+        .context-box h2 {
+            font-size: 24px;
+            color: var(--bg);
+            margin-bottom: 20px;
+        }
+
+        .context-box p {
+            color: #a8a29e;
+            font-size: 13px;
+        }
+
+        .context-box strong {
+            color: var(--bg);
+        }
+
+        /* Key Insight */
+        .key-insight {
+            background: var(--accent);
+            color: white;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .key-insight h3 {
+            color: white;
+            border: none;
+            margin: 0 0 12px 0;
+            padding: 0;
+            font-size: 18px;
+        }
+
+        .key-insight p {
+            margin: 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Diagram */
+        .diagram {
+            background: var(--bg-warm);
+            padding: 30px;
+            margin: 24px 0;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        .diagram pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        /* Option Cards */
+        .option-card {
+            background: white;
+            border: 2px solid var(--bg-warm);
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .option-card.recommended {
+            border-color: var(--accent);
+        }
+
+        .option-header {
+            padding: 20px 24px;
+            background: var(--bg-warm);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .option-card.recommended .option-header {
+            background: var(--accent);
+            color: white;
+        }
+
+        .option-letter {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        .option-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+        }
+
+        .option-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .option-card.recommended .option-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .option-body {
+            padding: 24px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .option-section h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .option-section ul {
+            list-style: none;
+            font-size: 12px;
+        }
+
+        .option-section li {
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .option-section li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .option-section.pros li::before { content: "✓"; color: var(--success); }
+        .option-section.cons li::before { content: "!"; color: var(--warning); }
+        .option-section.neutral li::before { content: "○"; color: var(--text-secondary); }
+
+        /* 1337 Role Box */
+        .role-box {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .role-box h4 {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .role-box p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Validation Box */
+        .validation-box {
+            background: var(--success-light);
+            border-left: 4px solid var(--success);
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .validation-box h4 {
+            font-size: 14px;
+            color: var(--success);
+            margin-bottom: 12px;
+        }
+
+        .validation-box p {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .validation-box ul {
+            list-style: none;
+            font-size: 12px;
+        }
+
+        .validation-box li {
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .validation-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        /* Strategy Matrix */
+        .strategy-matrix {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 40px;
+            margin: 40px -40px;
+        }
+
+        .strategy-matrix h2 {
+            font-size: 24px;
+            color: var(--bg);
+            margin-bottom: 24px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .matrix-table th {
+            background: rgba(255,255,255,0.1);
+            color: var(--bg);
+            text-align: left;
+            padding: 12px;
+            font-weight: 500;
+        }
+
+        .matrix-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #a8a29e;
+        }
+
+        .matrix-table .highlight {
+            background: rgba(120,63,243,0.2);
+            color: var(--bg);
+        }
+
+        /* Product Architecture */
+        .product-arch {
+            background: var(--bg-warm);
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .product-arch h3 {
+            border: none;
+            margin: 0 0 20px 0;
+            padding: 0;
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: stretch;
+            background: white;
+            border: 1px solid var(--bg-warm);
+        }
+
+        .layer-name {
+            background: var(--stone-dark);
+            color: var(--bg);
+            padding: 16px;
+            min-width: 150px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+        }
+
+        .layer-content {
+            padding: 16px;
+            flex: 1;
+            font-size: 12px;
+        }
+
+        .layer-content .items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .layer-content .item {
+            background: var(--bg-warm);
+            padding: 4px 10px;
+            font-size: 10px;
+            border-radius: 3px;
+        }
+
+        .layer-content .item.new {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        /* Recommendation */
+        .recommendation {
+            background: var(--accent);
+            color: white;
+            padding: 40px;
+            margin: 40px -40px;
+        }
+
+        .recommendation h2 {
+            font-size: 28px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .recommendation p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .recommendation strong {
+            color: white;
+        }
+
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .rec-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+        }
+
+        .rec-item h4 {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .rec-item p {
+            font-size: 11px;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--bg-warm);
+            margin-top: 60px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .doc-title { font-size: 28px; }
+            .context-box, .strategy-matrix, .recommendation { margin: 30px -16px; padding: 24px 16px; }
+            .option-grid { grid-template-columns: 1fr; }
+            .rec-grid { grid-template-columns: 1fr; }
+            .arch-layer { flex-direction: column; }
+            .layer-name { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">1337</div>
+        <div class="tagline">The Intelligence Company</div>
+    </header>
+
+    <h1 class="doc-title">Legacy Rendszerek & Ügyfél Stratégia</h1>
+    <p class="doc-subtitle">Mit kezd az ügyfél a meglévő rendszereivel? És mi a 1337 szerepe?</p>
+
+    <!-- Context -->
+    <div class="context-box">
+        <h2>A Helyzet</h2>
+        <p>
+            A magyar FSI ügyfelek (KAVOSZ, Dorsum ügyfelei, bankok) <strong>rengeteg legacy rendszert</strong>
+            üzemeltetnek: régi saját fejlesztések, licenszelt szoftverek, SaaS megoldások.
+        </p>
+        <p>
+            Amikor AI platformot választanak, nem csak a platform számít — hanem az is, hogy
+            <strong>mi lesz a meglévő rendszereikkel</strong> és <strong>hogyan illeszkedik a workflow-jukba</strong>.
+        </p>
+        <p>
+            <strong>A compliance kritikus:</strong> akár cloud, akár on-prem — MNB, GDPR, AI Act, DORA.
+            Minden integrációnak audit-ready-nek kell lennie.
+        </p>
+    </div>
+
+    <!-- MCP Validation -->
+    <section>
+        <h2><span class="section-num">01</span> MCP mint Integrációs Réteg</h2>
+
+        <p>
+            <strong>Kérdés:</strong> Az MCP (Model Context Protocol) a megfelelő technológiai megközelítés
+            a legacy rendszerekhez való kapcsolódásra?
+        </p>
+
+        <div class="validation-box">
+            <h4>Válasz: Igen, az MCP ideális erre a célra</h4>
+            <p>Az MCP egy absztrakciós réteg, ami lehetővé teszi, hogy az AI egységesen kommunikáljon
+            bármilyen háttérrendszerrel, függetlenül annak technológiájától.</p>
+            <ul>
+                <li><strong>Protokoll-agnosztikus:</strong> REST, SOAP, SQL, file-based — bármit be tud csomagolni</li>
+                <li><strong>Tool-alapú:</strong> Egyszerű eszközöket definiálsz (list, get, update), az AI használja</li>
+                <li><strong>Inkrementális:</strong> Rendszerenként külön MCP server, fokozatosan építhető</li>
+                <li><strong>Audit-ready:</strong> Minden tool hívás loggolható, nyomon követhető</li>
+                <li><strong>Izolált:</strong> Ha egy rendszer változik, csak az MCP server-t kell módosítani</li>
+            </ul>
+        </div>
+
+        <div class="diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           1337 Platform                                  │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                         AI / Skills Layer                          │  │
+│  │         (Nem tudja, nem érdekli milyen a legacy rendszer)         │  │
+│  └─────────────────────────────┬─────────────────────────────────────┘  │
+│                                │                                         │
+│  ┌─────────────────────────────▼─────────────────────────────────────┐  │
+│  │                      MCP Integration Layer                         │  │
+│  │                                                                    │  │
+│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐   │  │
+│  │  │  LIZI MCP  │  │  SZKP MCP  │  │  CRM MCP   │  │ Legacy MCP │   │  │
+│  │  │   Server   │  │   Server   │  │   Server   │  │   Server   │   │  │
+│  │  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘   │  │
+│  └────────┼───────────────┼───────────────┼───────────────┼──────────┘  │
+└───────────┼───────────────┼───────────────┼───────────────┼─────────────┘
+            │               │               │               │
+            ▼               ▼               ▼               ▼
+     ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────────┐
+     │  LIZI    │    │   SZKP   │    │   CRM    │    │ Legacy System│
+     │ (Oracle) │    │  (REST)  │    │  (SaaS)  │    │ (COBOL/File) │
+     └──────────┘    └──────────┘    └──────────┘    └──────────────┘
+            </pre>
+        </div>
+
+        <div class="key-insight">
+            <h3>Kulcs Insight</h3>
+            <p>
+                Az MCP lényege: <strong>a legacy rendszer bonyolultsága el van rejtve</strong>.
+                Az AI csak annyit lát: "van egy tool ami lekéri az ügyféladatot". Nem tudja,
+                és nem is kell tudnia, hogy az Oracle, COBOL, vagy REST API mögött van.
+            </p>
+        </div>
+    </section>
+
+    <!-- Customer Options -->
+    <section>
+        <h2><span class="section-num">02</span> Ügyfél Stratégiai Opciók</h2>
+        <p>
+            Miután az MCP-n keresztül kapcsolódunk a legacy rendszerekhez, az ügyfélnek
+            döntenie kell: <strong>mi legyen hosszú távon ezekkel a rendszerekkel?</strong>
+        </p>
+    </section>
+
+    <!-- Option A -->
+    <div class="option-card">
+        <div class="option-header">
+            <div class="option-letter">A</div>
+            <div>
+                <div class="option-title">Legacy Rendszer Újraírása</div>
+                <div class="option-subtitle">Greenfield fejlesztés, modern stack</div>
+            </div>
+        </div>
+        <div class="option-body">
+            <p>
+                Az ügyfél úgy dönt, hogy a régi rendszereket lecseréli modern, AI-native megoldásokra.
+                Nem csak integrálódik az AI-hoz, hanem <strong>az AI köré épít új rendszert</strong>.
+            </p>
+
+            <div class="option-grid">
+                <div class="option-section pros">
+                    <h4>Előnyök</h4>
+                    <ul>
+                        <li>Technikai adósság megszűnik</li>
+                        <li>AI-native architektúra</li>
+                        <li>Jobb user experience</li>
+                        <li>Hosszú távú költségcsökkenés</li>
+                        <li>Modern compliance beépítve</li>
+                    </ul>
+                </div>
+                <div class="option-section cons">
+                    <h4>Kockázatok</h4>
+                    <ul>
+                        <li>Magas upfront költség (€500k - €5M)</li>
+                        <li>Hosszú timeline (12-36 hónap)</li>
+                        <li>Business disruption risk</li>
+                        <li>Szükséges szakértelem ritka</li>
+                        <li>"Big bang" projektesély: 70% fail</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4 style="margin-top: 24px; font-size: 14px;">A1: Ki fejleszti és üzemelteti?</h4>
+
+            <div class="option-grid" style="margin-top: 12px;">
+                <div class="option-section neutral">
+                    <h4>In-house fejlesztés</h4>
+                    <ul>
+                        <li>Az ügyfél "szoftvercéggé válik"</li>
+                        <li>Dev team felvétele (drága, nehéz)</li>
+                        <li>Teljes kontroll, de teljes felelősség</li>
+                        <li>KAVOSZ-típus: valószínűtlen választás</li>
+                    </ul>
+                </div>
+                <div class="option-section neutral">
+                    <h4>Outsourced (pl. 1337)</h4>
+                    <ul>
+                        <li>1337 mint "AI-native szoftverfejlesztő"</li>
+                        <li>Managed service modell</li>
+                        <li>Ügyfél nem válik tech céggé</li>
+                        <li>1337 scope bővülés: platform → software</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="role-box">
+                <h4>1337 Szerepe Opció A esetén</h4>
+                <p>
+                    <strong>Ha az ügyfél újraír:</strong> 1337 lehet a fejlesztő partner és/vagy managed service provider.
+                    Ez jelentős scope bővülés — nem csak "AI platform", hanem "AI-native szoftver fejlesztés és üzemeltetés".
+                    <br><br>
+                    <strong>Kérdés:</strong> Akarunk ilyen irányba menni? Ez más üzleti modell.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option B -->
+    <div class="option-card recommended">
+        <div class="option-header">
+            <div class="option-letter">B</div>
+            <div>
+                <div class="option-title">Legacy Megtartása + AI Overlay</div>
+                <div class="option-subtitle">MCP integráció, workflow automatizálás</div>
+            </div>
+        </div>
+        <div class="option-body">
+            <p>
+                Az ügyfél <strong>megtartja a legacy rendszereket</strong>, de az AI platformon keresztül
+                dolgozik velük. A régi UI-t egyre kevésbé használja, a workflow az AI felületen történik.
+            </p>
+
+            <div class="option-grid">
+                <div class="option-section pros">
+                    <h4>Előnyök</h4>
+                    <ul>
+                        <li>Nincs disruption, azonnal indul</li>
+                        <li>Alacsony kockázat</li>
+                        <li>Inkrementális értékteremtés</li>
+                        <li>Legacy licensz marad, de kevesebb használat</li>
+                        <li>ROI gyors (hetek, nem évek)</li>
+                    </ul>
+                </div>
+                <div class="option-section cons">
+                    <h4>Kockázatok</h4>
+                    <ul>
+                        <li>Technikai adósság marad</li>
+                        <li>Legacy korlátoz (amit nem tud, nem tud)</li>
+                        <li>Dupla költség (legacy + platform)</li>
+                        <li>Integráció bonyolultsága</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="role-box">
+                <h4>1337 Szerepe Opció B esetén</h4>
+                <p>
+                    <strong>Ez a core value proposition.</strong> 1337 építi az MCP szervereket,
+                    a domain-specifikus skill-eket, és deploy-olja a platformot.
+                    <br><br>
+                    A legacy rendszer "adatforrás és akció-végpont" lesz — az AI orkesztrál,
+                    a legacy végrehajtja.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option C -->
+    <div class="option-card">
+        <div class="option-header">
+            <div class="option-letter">C</div>
+            <div>
+                <div class="option-title">Custom UI a Legacy Fölött</div>
+                <div class="option-subtitle">AI-powered, de nem agentic interface</div>
+            </div>
+        </div>
+        <div class="option-body">
+            <p>
+                Nem mindenki tud vagy akar "agentic" (chat-alapú) felületet használni.
+                Egyes ügyfelek <strong>hagyományos UI-t szeretnének, de AI-támogatással</strong>.
+            </p>
+
+            <div class="diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                    Opció B: Agentic                              │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  User: "Nézd át a mai SZKP igényléseket"                  │  │
+│  │  AI: *listázza, elemzi, javasol*                          │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    Opció C: Custom UI                            │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  ┌─────────────────────────────────────────────────────┐  │  │
+│  │  │  SZKP Igénylések Dashboard                          │  │  │
+│  │  │  ┌───────────────────────────────────────────────┐  │  │  │
+│  │  │  │ ● Feldolgozásra vár: 12    [AI: 3 hiányos]   │  │  │  │
+│  │  │  │ ● Döntésre kész: 8        [AI: mind OK]      │  │  │  │
+│  │  │  │ ● Hiánypótlásra vár: 5    [Auto-levél ▶]     │  │  │  │
+│  │  │  └───────────────────────────────────────────────┘  │  │  │
+│  │  │                                                     │  │  │
+│  │  │  [Gomb: Hiánypótlás indítása]  [Gomb: Riport]      │  │  │
+│  │  └─────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  → Nincs chat, vannak GOMBOK és DASHBOARD-ok                    │
+│  → De az AI ugyanúgy fut a háttérben                            │
+└─────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <div class="option-grid">
+                <div class="option-section pros">
+                    <h4>Előnyök</h4>
+                    <ul>
+                        <li>Ismerős felület a usernek</li>
+                        <li>Könnyebb adoption</li>
+                        <li>Workflow-specifikus optimalizálás</li>
+                        <li>Kevesebb "prompt engineering" a usertől</li>
+                        <li>Guided experience</li>
+                    </ul>
+                </div>
+                <div class="option-section cons">
+                    <h4>Kockázatok</h4>
+                    <ul>
+                        <li>Több fejlesztési munka (UI építés)</li>
+                        <li>Kevésbé flexibilis</li>
+                        <li>Minden workflow-hoz külön UI</li>
+                        <li>Nem skálázódik annyi use case-re</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <h3>Kulcs Insight: A Backend Ugyanaz</h3>
+                <p>
+                    Opció B és C <strong>ugyanazt a backend-et használja</strong>: Skills + MCP Serverek.
+                    A különbség csak a frontend: chat vs. dashboard/forms.
+                    Egy ügyfélnek lehet MINDKETTŐ — power user-ek chat-elnek, back-office dashboard-ot kap.
+                </p>
+            </div>
+
+            <div class="role-box">
+                <h4>1337 Szerepe Opció C esetén</h4>
+                <p>
+                    1337 építi a custom UI-t is a platform fölé. Ez <strong>product development munka</strong>,
+                    nem csak platform deployment.
+                    <br><br>
+                    <strong>Alternatíva:</strong> Az ügyfél (vagy Dorsum-típusú partner) építi a UI-t,
+                    mi API-t adunk.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Architecture -->
+    <section>
+        <h2><span class="section-num">03</span> 1337 Termék Architektúra</h2>
+        <p>
+            A három opció alapján a 1337 Platform valójában <strong>három termékként</strong>
+            pozícionálható — de közös alapokon:
+        </p>
+
+        <div class="product-arch">
+            <h3>Rétegelt Architektúra</h3>
+            <div class="arch-layers">
+                <div class="arch-layer">
+                    <div class="layer-name">Interface Layer</div>
+                    <div class="layer-content">
+                        <div class="items">
+                            <span class="item">Agentic Chat (Craft Agent fork)</span>
+                            <span class="item new">Custom Dashboards</span>
+                            <span class="item new">Embedded Widgets</span>
+                            <span class="item new">API / Headless</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="layer-name">Skills Layer</div>
+                    <div class="layer-content">
+                        <div class="items">
+                            <span class="item">Lending Ops</span>
+                            <span class="item">Hiánypótlás</span>
+                            <span class="item">Code Review</span>
+                            <span class="item">Riporting</span>
+                            <span class="item">+ Domain Skills</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="layer-name">MCP Layer</div>
+                    <div class="layer-content">
+                        <div class="items">
+                            <span class="item">LIZI Server</span>
+                            <span class="item">SZKP Server</span>
+                            <span class="item">CRM Server</span>
+                            <span class="item">GitLab Server</span>
+                            <span class="item">+ Legacy Connectors</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="layer-name">LLM Layer</div>
+                    <div class="layer-content">
+                        <div class="items">
+                            <span class="item">Claude API</span>
+                            <span class="item new">Ollama (on-prem)</span>
+                            <span class="item new">Azure OpenAI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Matrix -->
+    <div class="strategy-matrix">
+        <h2>Ügyfél Típus → Opció Mátrix</h2>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Ügyfél Típus</th>
+                    <th>Legacy Helyzet</th>
+                    <th>Javasolt Opció</th>
+                    <th>1337 Szerep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>KAVOSZ-típus</strong><br>Ops-heavy, nem tech cég</td>
+                    <td>LIZI, SZKP, CRM<br>Licenszelt + SaaS</td>
+                    <td class="highlight"><strong>B: AI Overlay</strong><br>+ esetleg C: Dashboard</td>
+                    <td>Platform + Skills + MCP<br>Ongoing FDE support</td>
+                </tr>
+                <tr>
+                    <td><strong>Dorsum-típus</strong><br>Tech/Engineering cég</td>
+                    <td>Saját fejlesztés<br>GitLab, JIRA</td>
+                    <td class="highlight"><strong>B: AI Overlay</strong><br>Agentic interface OK</td>
+                    <td>Platform + Dev Skills<br>Codebase integration</td>
+                </tr>
+                <tr>
+                    <td><strong>Bank/Biztosító</strong><br>Erős compliance</td>
+                    <td>Core banking legacy<br>IBM, Oracle</td>
+                    <td><strong>B → C fokozatosan</strong><br>On-prem requirement</td>
+                    <td>On-prem deploy<br>Audit/compliance layer</td>
+                </tr>
+                <tr>
+                    <td><strong>Startup/Scale-up</strong><br>Nincs legacy</td>
+                    <td>Modern SaaS stack<br>Cloud-native</td>
+                    <td><strong>A: AI-native build</strong><br>vagy B: Quick overlay</td>
+                    <td>Consulting + Platform<br>Esetleg custom dev</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Recommendation -->
+    <div class="recommendation">
+        <h2>Stratégiai Javaslat</h2>
+        <p>
+            A legtöbb magyar FSI ügyfél a <strong>B opciót</strong> fogja választani (Legacy + AI Overlay),
+            mert ez a legkisebb kockázat és leggyorsabb érték.
+        </p>
+        <p>
+            De <strong>fel kell készülni a C opcióra</strong> is (Custom UI), mert nem mindenki fog
+            chat-alapú felületet használni — különösen back-office, ahol structured workflow a norma.
+        </p>
+
+        <div class="rec-grid">
+            <div class="rec-item">
+                <h4>Short-term (0-6 hó)</h4>
+                <p>
+                    Opció B: MCP + Skills + Agentic interface.
+                    KAVOSZ és Dorsum reference-ek.
+                </p>
+            </div>
+            <div class="rec-item">
+                <h4>Mid-term (6-18 hó)</h4>
+                <p>
+                    Opció C képesség: Custom UI / Dashboard builder.
+                    Embedded AI widgets ügyfeleknek.
+                </p>
+            </div>
+            <div class="rec-item">
+                <h4>Long-term (18+ hó)</h4>
+                <p>
+                    Döntés az A opcióról: Belépünk-e a
+                    "AI-native software development" piacra?
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Decisions -->
+    <section>
+        <h2><span class="section-num">04</span> Nyitott Stratégiai Kérdések</h2>
+
+        <div class="option-grid">
+            <div class="option-section neutral">
+                <h4>Megválaszolandó</h4>
+                <ul>
+                    <li>Építünk-e Custom UI / Dashboard képességet?</li>
+                    <li>Vállalunk-e full software dev projekteket (Opció A)?</li>
+                    <li>Mi a boundary: platform vs. application?</li>
+                    <li>Partner modell: Dorsum épít UI-t, mi adjuk az AI-t?</li>
+                </ul>
+            </div>
+            <div class="option-section neutral">
+                <h4>Eldöntött</h4>
+                <ul>
+                    <li>✓ MCP a helyes integrációs megközelítés</li>
+                    <li>✓ Skills-based architecture</li>
+                    <li>✓ On-prem opció kell (LLM provider abstraction)</li>
+                    <li>✓ Compliance-first minden szinten</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">1337</div>
+        <p>The Intelligence Company</p>
+        <p style="margin-top: 20px; font-size: 10px;">
+            2026-02-08 • Stratégiai Elemzés • Confidential
+        </p>
+    </footer>
+</div>
+
+</body>
+</html>
